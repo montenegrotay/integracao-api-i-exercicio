@@ -43,14 +43,14 @@ export default function Musicas(props) {
             }
         })
         .then((resposta) => {
-            
+            addTrackToPlaylist()
         })
         .catch((erro) => {
-            console.log(erro)
+            console.log(erro.response)
         })
     }
 
-
+    //Remover uma música de uma playlist
     const removeTrackFromPlaylist= (id) => {
         axios.delete(`https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${props.playlist.id}/tracks/${id}`, {
             headers: {
@@ -63,11 +63,31 @@ export default function Musicas(props) {
         .catch((erro) => {
             console.log(erro)
         })
-    }
+    };
+
+
+
+    //Remover uma playlist
+    const deletePlaylist = async () => {
+        try {
+            await axios.delete(`https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${props.playlists.id}`, {
+                headers: {
+                    Authorization: "taynara-montenegro-ammal" 
+                }
+            })
+        
+            props.getAllPlaylists()
+        } catch (error) {
+            console.log(error)
+        }
+
+    };
 
     return (
         <ContainerMusicas>
             <h2>{props.playlist.name}</h2>
+            <button onClick={deletePlaylist}> Deletar playlist </button>
+            
             {musicas.map((musica) => {
                 return (
                     <Musica key={musica.id}>
